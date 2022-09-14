@@ -182,3 +182,9 @@ code {
 .todo-list .list .todo.completed .text {
   text-decoration: line-through;
 }
+
+@media (min-width: 500px) {
+  .todo-input, .todo-list-wrapper{
+    max-width: 650px;
+  }
+}
