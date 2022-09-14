@@ -3,6 +3,7 @@ import "./App.css";
 import HeadingImg from "./images/header-bg.jpg";
 function App() {
   const [todosList, settodosList] = useState([]);
+  const [newTodo, setnewTodo] = useState("");
   const [doneList, setdoneList] = useState([]);
 
   useEffect(() => {
@@ -23,6 +24,26 @@ function App() {
       { text: "Going to doctor", completed: false },
     ]);
   };
+  const handleAddTodo = () => {
+    if (!newTodo) return;
+    settodosList([...todosList, { text: newTodo, completed: false }]);
+    setnewTodo("");
+  };
+
+  const handleCompleteTask = (task) => {
+    // Remove task from todo list
+    const _todoList = todosList.filter((i) => task.text !== i.text);
+    settodosList(_todoList);
+    // Add task from Completed list
+    setdoneList([...doneList, { text: task.text, completed: true }]);
+  };
+  const handleUndoComplete = (task) => {
+    // Remove task from Completed list
+    const _doneList = doneList.filter((i) => task.text !== i.text);
+    setdoneList(_doneList);
+    // Add task from todo list
+    settodosList([...todosList, { text: task.text, completed: false }]);
+  };
 
   return (
     <div className="container">
@@ -34,18 +55,28 @@ function App() {
         <h1 className="title">Todo APP</h1>
       </div>
       <div className="todo-input">
-        <input type="text" placeholder="What's in your mind.." />
-        <button className="add">Add</button>
+        <input
+          type="text"
+          placeholder="What's in your mind.."
+          value={newTodo}
+          onChange={(e) => setnewTodo(e.target.value)}
+        />
+        <button className="add" onClick={handleAddTodo}>
+          Add
+        </button>
       </div>
       <div className="todo-list-wrapper">
         <h2 className="title">Todos</h2>
         <div className="todo-list">
           <ul className="list">
             {todosList?.map((item) => (
-              <li className="todo">
+              <li className="todo" key={item.text}>
                 <span className="text">{item.text}</span>
                 <span className="actions">
-                  <button className="icon check">
+                  <button
+                    className="icon check"
+                    onClick={() => handleCompleteTask(item)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="27"
@@ -83,27 +114,30 @@ function App() {
         <h2 className="title">Completed</h2>
         <div className="todo-list completed">
           <ul className="list">
-          {todosList?.map((item) => (
-            <li className="todo completed">
-              <span className="text">{item.text}</span>
-              <span className="actions">
-                <button className="icon check">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="27"
-                    height="27"
-                    viewBox="0 0 27 27"
+            {doneList?.map((item) => (
+              <li className="todo completed" key={item.text}>
+                <span className="text">{item.text}</span>
+                <span className="actions">
+                  <button
+                    className="icon check"
+                    onClick={() => handleUndoComplete(item)}
                   >
-                    <path
-                      id="Icon_ionic-md-checkbox-outline"
-                      data-name="Icon ionic-md-checkbox-outline"
-                      d="M11.85,15.15l-2.1,2.1L16.5,24l15-15L29.4,6.9,16.5,19.725ZM28.5,28.5H7.5V7.5h15v-3H7.5a3.009,3.009,0,0,0-3,3v21a3.009,3.009,0,0,0,3,3h21a3.009,3.009,0,0,0,3-3v-12h-3Z"
-                      transform="translate(-4.5 -4.5)"
-                    />
-                  </svg>
-                </button>
-              </span>
-            </li>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="27"
+                      height="27"
+                      viewBox="0 0 27 27"
+                    >
+                      <path
+                        id="Icon_ionic-md-checkbox-outline"
+                        data-name="Icon ionic-md-checkbox-outline"
+                        d="M11.85,15.15l-2.1,2.1L16.5,24l15-15L29.4,6.9,16.5,19.725ZM28.5,28.5H7.5V7.5h15v-3H7.5a3.009,3.009,0,0,0-3,3v21a3.009,3.009,0,0,0,3,3h21a3.009,3.009,0,0,0,3-3v-12h-3Z"
+                        transform="translate(-4.5 -4.5)"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              </li>
             ))}
           </ul>
         </div>
