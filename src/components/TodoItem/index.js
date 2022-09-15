@@ -1,32 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
+import { typeCompleteTodo, typeRemoveTodo, typeUndoCompleteTodo } from "../../context/strings";
+import { TodosContext } from "../../context/todosContext";
 
-const TodoItem = ({
-  item,
-  todosList,
-  settodosList,
-  doneList,
-  setdoneList,
-  isCompleted,
-}) => {
-  const handleCompleteTask = (task) => {
-    // Remove task from todo list
-    const _todoList = todosList.filter((i) => task.text !== i.text);
-    // Add task from Completed list
-    settodosList([..._todoList, { text: task.text, completed: true }]);
-  };
-
-  const handleUndoComplete = (task) => {
-    // Remove task from Completed list
-    const _todosList = todosList.filter((i) => task.text !== i.text);
-    // Add task from todo list
-    settodosList([{ text: task.text, completed: false }, ..._todosList]);
-  };
-
+const TodoItem = ({ item, isCompleted }) => {
+  const { dispatch } = useContext(TodosContext);
   return isCompleted ? (
     <li className="todo completed" key={item.text}>
       <span className="text">{item.text}</span>
       <span className="actions">
-        <button className="icon check" onClick={() => handleUndoComplete(item)}>
+        <button className="icon check" onClick={() => dispatch({ type: typeUndoCompleteTodo, payload: item })}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="27"
@@ -47,7 +29,10 @@ const TodoItem = ({
     <li className="todo" key={item.text}>
       <span className="text">{item.text}</span>
       <span className="actions">
-        <button className="icon check" onClick={() => handleCompleteTask(item)}>
+        <button
+          className="icon check"
+          onClick={() => dispatch({ type: typeCompleteTodo, payload: item })}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="27"
@@ -62,7 +47,10 @@ const TodoItem = ({
             />
           </svg>
         </button>
-        <button className="icon delete">
+        <button
+          className="icon delete"
+          onClick={() => dispatch({ type: typeRemoveTodo, payload: item })}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="21"

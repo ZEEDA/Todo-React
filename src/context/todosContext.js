@@ -1,22 +1,46 @@
 import { createContext, useReducer } from "react";
-import { typeAddTodo } from "./strings";
+import {
+  typeAddTodo,
+  typeupdateTodos,
+  typeRemoveTodo,
+  typeCompleteTodo,
+  typeUndoCompleteTodo,
+} from "./strings";
 
-const TodosContext = createContext();
+export const TodosContext = createContext();
 
-const TodosContextProvider = ({ children }) => {
+export const TodosContextProvider = ({ children }) => {
   const INIT_STATE = {
     todos: [],
   };
 
-  const todoReducer = (state, actoin) => {
+  const todoReducer = (state, action) => {
     switch (action.type) {
+      case typeupdateTodos:
+        return {
+          todos: action.payload,
+        };
       case typeAddTodo:
         return {
-          todos: [...state.todos, action.newTodo],
+          todos: [action.payload, ...state.todos],
         };
       case typeRemoveTodo:
         return {
-          todos: [...action.newList],
+          todos: state?.todos?.filter((i) => action.payload.text !== i.text),
+        };
+      case typeCompleteTodo:
+        return {
+          todos: [
+            ...state?.todos?.filter((i) => action.payload.text !== i.text),
+            { text: action.payload.text, completed: true },
+          ],
+        };
+      case typeUndoCompleteTodo:
+        return {
+          todos: [
+            { text: action.payload.text, completed: false },
+            ...state?.todos?.filter((i) => action.payload.text !== i.text),
+          ],
         };
       default:
         return state;
@@ -24,5 +48,9 @@ const TodosContextProvider = ({ children }) => {
   };
   const [state, dispatch] = useReducer(todoReducer, INIT_STATE);
 
-  return <TodosContext.Provider value={{state, dispatch}}>{children}</TodosContext.Provider>;
+  return (
+    <TodosContext.Provider value={{ state, dispatch }}>
+      {children}
+    </TodosContext.Provider>
+  );
 };

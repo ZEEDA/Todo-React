@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { typeAddTodo } from "../../context/strings";
+import { TodosContext } from "../../context/todosContext";
 
-const AddTodo = ({ newTodo, setnewTodo, handleAddTodo }) => {
+const AddTodo = () => {
+  
+  const [newTodo, setnewTodo] = useState("");
+  const { dispatch } = useContext(TodosContext);
+  
+  const handleAddTodo = () => {
+    if (!newTodo) return;
+    dispatch({
+      type: typeAddTodo,
+      payload: { text: newTodo, completed: false },
+    });
+    setnewTodo("");
+  };
+
   return (
     <div className="todo-input">
       <input
