@@ -6,31 +6,26 @@ const TodoList = ({
   settodosList,
   doneList,
   setdoneList,
-  isCompleted,
 }) => {
-  const renderContent = () => {
-    return isCompleted
-      ? doneList?.map((item) => (
-          <TodoItem
-            todosList={todosList}
-            settodosList={settodosList}
-            doneList={doneList}
-            setdoneList={setdoneList}
-            item={item}
-            isCompleted={true}
-          />
-        ))
-      : todosList?.map((item) => (
-          <TodoItem
-            todosList={todosList}
-            settodosList={settodosList}
-            doneList={doneList}
-            setdoneList={setdoneList}
-            item={item}
-          />
-        ));
-  };
-  return <ul className="list">{renderContent()}</ul>;
+  return (
+    <div className="todo-list-wrapper">
+      <h2 className="title">To-do list</h2>
+      <div className="todo-list">
+        <ul className="list">
+          {todosList?.map((item) => (
+            <TodoItem
+              todosList={todosList}
+              settodosList={settodosList}
+              doneList={doneList}
+              setdoneList={setdoneList}
+              item={item}
+              isCompleted={item.completed}
+            />
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 };
 
 export default TodoList;

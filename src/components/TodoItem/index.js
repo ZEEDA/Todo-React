@@ -11,17 +11,15 @@ const TodoItem = ({
   const handleCompleteTask = (task) => {
     // Remove task from todo list
     const _todoList = todosList.filter((i) => task.text !== i.text);
-    settodosList(_todoList);
     // Add task from Completed list
-    setdoneList([...doneList, { text: task.text, completed: true }]);
+    settodosList([..._todoList, { text: task.text, completed: true }]);
   };
 
   const handleUndoComplete = (task) => {
     // Remove task from Completed list
-    const _doneList = doneList.filter((i) => task.text !== i.text);
-    setdoneList(_doneList);
+    const _todosList = todosList.filter((i) => task.text !== i.text);
     // Add task from todo list
-    settodosList([...todosList, { text: task.text, completed: false }]);
+    settodosList([{ text: task.text, completed: false }, ..._todosList]);
   };
 
   return isCompleted ? (

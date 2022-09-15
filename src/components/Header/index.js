@@ -7,7 +7,7 @@ const Header = () => {
         className="bg"
         style={{ backgroundImage: `url(${HeadingImg})` }}
       ></span>
-      <h1 className="title">Todo APP</h1>
+      <h1 className="title">To-do APP</h1>
     </div>
   );
 };

@@ -10,7 +10,6 @@ function App() {
 
   useEffect(() => {
     getTodosList();
-    getDoneList();
     return () => {};
   }, []);
 
@@ -18,17 +17,14 @@ function App() {
     settodosList([
       { text: "Buy Cofee", completed: false },
       { text: "Take children's from schoole", completed: false },
-    ]);
-  };
-  const getDoneList = () => {
-    setdoneList([
       { text: "15min Reading", completed: false },
-      { text: "Going to doctor", completed: false },
+      { text: "Going to doctor", completed: true },
     ]);
   };
+
   const handleAddTodo = () => {
     if (!newTodo) return;
-    settodosList([...todosList, { text: newTodo, completed: false }]);
+    settodosList([{ text: newTodo, completed: false },...todosList]);
     setnewTodo("");
   };
 
@@ -40,27 +36,12 @@ function App() {
         setnewTodo={setnewTodo}
         handleAddTodo={handleAddTodo}
       />
-      <div className="todo-list-wrapper">
-        <h2 className="title">Todos</h2>
-        <div className="todo-list">
-          <TodoList
-            todosList={todosList}
-            settodosList={settodosList}
-            doneList={doneList}
-            setdoneList={setdoneList}
-          />
-        </div>
-        <h2 className="title">Completed</h2>
-        <div className="todo-list completed">
-          <TodoList
-            todosList={todosList}
-            settodosList={settodosList}
-            doneList={doneList}
-            setdoneList={setdoneList}
-            isCompleted={true}
-          />
-        </div>
-      </div>
+      <TodoList
+        todosList={todosList}
+        settodosList={settodosList}
+        doneList={doneList}
+        setdoneList={setdoneList}
+      />
     </div>
   );
 }
